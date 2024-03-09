@@ -1,0 +1,42 @@
+/* stylelint-disable at-rule-no-unknown */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* stylelint-enable at-rule-no-unknown */
+
+@layer base {
+  @font-face {
+    font-family: Nunito;
+    src: url('/fonts/Nunito-Variable.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: Nunito;
+    src: url('/fonts/Nunito-Variable.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+  }
+
+  html {
+    @apply text-moss;
+
+    font-family: Nunito, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  }
+
+  title {
+    @apply text-lg font-bold uppercase;
+
+    display: unset;
+  }
+
+  body,
+  p,
+  span,
+  input {
+    @apply text-sm;
+  }
+}

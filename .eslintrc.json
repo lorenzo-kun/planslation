@@ -1,0 +1,37 @@
+// https://typescript.nuxtjs.org/guide/lint/#configuration
+{
+  "root": true,
+  "extends": ["@nuxtjs/eslint-config-typescript"],
+  "ignorePatterns": [".output/**", "dist/**", "node_modules/**"],
+  "rules": {
+    "@typescript-eslint/comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never",
+      "enums": "always-multiline",
+      "generics": "only-multiline",
+      "tuples": "only-multiline"
+    }],
+    "@typescript-eslint/object-curly-spacing": [
+      "error",
+      "always",
+      { "objectsInObjects": false }
+    ],
+    "array-bracket-newline": ["error", { "multiline": true }],
+    "array-element-newline": ["error", { "multiline": true, "minItems": 3 }],
+    "comma-dangle": "off",
+    "curly": ["error", "multi", "consistent"],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectPattern": { "multiline": true, "minProperties": 3 },
+        "ExportDeclaration": { "multiline": true, "minProperties": 2 }
+      }
+    ],
+    "object-property-newline": "error",
+    "object-curly-spacing": "off",
+    "semi": ["error", "always"]
+  }
+}

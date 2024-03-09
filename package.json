@@ -1,0 +1,43 @@
+{
+  "name": "planslation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "lint": "pnpm run lint:ts && pnpm run lint:css",
+    "lint:ts": "eslint --ext .ts,.js,.vue .",
+    "lint:css": "npx stylelint **/*.css",
+    "lint:fix": "pnpm run lint:ts --fix && pnpm run lint:css --fix",
+    "lint:ts-fix": "pnpm run lint --fix",
+    "lint:css-fix": "pnpm run lint:css --fix",
+    "test": "vitest --passWithNoTests",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@egoist/tailwindcss-icons": "1.7.4",
+    "@iconify-json/ooui": "1.1.33",
+    "@nuxt/test-utils": "3.11.0",
+    "@nuxtjs/eslint-config-typescript": "12.1.0",
+    "@nuxtjs/tailwindcss": "6.11.4",
+    "@vue/test-utils": "2.4.4",
+    "eslint": "8.57.0",
+    "happy-dom": "13.7.1",
+    "nuxt": "3.10.3",
+    "stylelint": "16.2.0",
+    "stylelint-config-recommended-vue": "1.5.0",
+    "stylelint-config-standard": "36.0.0",
+    "tailwindcss": "3.4.1",
+    "typescript": "5.3.3",
+    "vitest": "1.2.1",
+    "vue": "3.4.21",
+    "vue-router": "4.3.0",
+    "vue-tsc": "1.8.27"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=8"
+  }
+}
