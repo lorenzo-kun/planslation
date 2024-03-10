@@ -7,5 +7,23 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
 
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/i18n', '@nuxtjs/tailwindcss'],
+
+  i18n: {
+    lazy: true,
+    langDir: 'locales',
+    defaultLocale: 'en',
+    locales: [
+      {
+        code: 'en',
+        name: 'English (US)',
+        files: ['en.yaml'],
+      },
+      {
+        code: 'en-gb',
+        name: 'English (UK)',
+        files: ['en.yaml', 'en-gb.yaml'],
+      },
+    ],
+  },
 });
