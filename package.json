@@ -13,8 +13,17 @@
     "lint:css-fix": "pnpm run lint:css --fix",
     "test": "vitest --passWithNoTests",
     "generate": "nuxt generate",
+    "generate:migrations": "pnpm drizzle-kit generate:sqlite",
+    "migrations": "pnpm drizzle-kit push:sqlite",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@libsql/client": "0.5.3",
+    "drizzle-orm": "0.29.5",
+    "nuxt": "3.10.3",
+    "vue": "3.4.21",
+    "vue-router": "4.3.0"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "1.7.4",
@@ -24,17 +33,15 @@
     "@nuxtjs/i18n": "8.1.1",
     "@nuxtjs/tailwindcss": "6.11.4",
     "@vue/test-utils": "2.4.4",
+    "drizzle-kit": "0.20.14",
     "eslint": "8.57.0",
     "happy-dom": "13.7.1",
-    "nuxt": "3.10.3",
     "stylelint": "16.2.0",
     "stylelint-config-recommended-vue": "1.5.0",
     "stylelint-config-standard": "36.0.0",
     "tailwindcss": "3.4.1",
     "typescript": "5.3.3",
     "vitest": "1.2.1",
-    "vue": "3.4.21",
-    "vue-router": "4.3.0",
     "vue-tsc": "1.8.27"
   },
   "engines": {
