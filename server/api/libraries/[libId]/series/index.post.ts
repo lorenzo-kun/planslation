@@ -17,7 +17,7 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
       db
         .insert(series)
         .values({
-          ...newSeries,
+          ...sanitiseAlias(newSeries),
           libraryId: libId,
         })
         .returning()

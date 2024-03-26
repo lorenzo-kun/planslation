@@ -10,7 +10,7 @@ export default defineEventHandler<{
   const db = useDb();
 
   const { result: insertedLibrary, error: libraryError } = await tryInsert(() =>
-    db.insert(libraries).values(newLibrary).returning()
+    db.insert(libraries).values(sanitiseAlias(newLibrary)).returning()
   );
 
   if (libraryError) return libraryError;
