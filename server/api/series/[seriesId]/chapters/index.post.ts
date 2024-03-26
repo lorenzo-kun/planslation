@@ -12,7 +12,7 @@ export default defineEventHandler<{ body: { chapter: NewChapter } }>(
     const db = useDb();
 
     // TODO: SESSION MANAGEMENT - check current user has permission on this series
-    const { result, error } = await tryInsert(() =>
+    const { result, error } = await tryInsert(
       db
         .insert(chapters)
         .values({
@@ -20,6 +20,7 @@ export default defineEventHandler<{ body: { chapter: NewChapter } }>(
           seriesId,
         })
         .returning()
+        .$dynamic()
     );
 
     return error || result;

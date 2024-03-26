@@ -14,11 +14,7 @@
       "generics": "only-multiline",
       "tuples": "only-multiline"
     }],
-    "@typescript-eslint/object-curly-spacing": [
-      "error",
-      "always",
-      { "objectsInObjects": false }
-    ],
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
     "array-bracket-newline": ["error", { "multiline": true }],
     "array-element-newline": ["error", { "multiline": true, "minItems": 3 }],
     "comma-dangle": "off",

@@ -1,5 +1,4 @@
 import { type NewSeries, series } from '~/db/schema';
-import { tryInsert } from '~/server/utils';
 
 // creates a new series in the given library
 export default defineEventHandler<{ body: { series: NewSeries } }>(
@@ -13,7 +12,7 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
     const db = useDb();
 
     // TODO: SESSION MANAGEMENT - check current user has permission on this library
-    const { result, error } = await tryInsert(() =>
+    const { result, error } = await tryInsert(
       db
         .insert(series)
         .values({
@@ -21,6 +20,7 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
           libraryId: libId,
         })
         .returning()
+        .$dynamic()
     );
 
     return error || result;

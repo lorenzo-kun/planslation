@@ -9,14 +9,18 @@ export default defineEventHandler<{
 
   const db = useDb();
 
-  const { result: insertedLibrary, error: libraryError } = await tryInsert(() =>
-    db.insert(libraries).values(sanitiseAlias(newLibrary)).returning()
+  const { result: insertedLibrary, error: libraryError } = await tryInsert(
+    db
+      .insert(libraries)
+      .values(sanitiseAlias(newLibrary))
+      .returning()
+      .$dynamic()
   );
 
   if (libraryError) return libraryError;
 
   if (admin) {
-    const { result: insertedUser, error: userError } = await tryInsert(() =>
+    const { result: insertedUser, error: userError } = await tryInsert(
       db
         .insert(users)
         .values({
@@ -25,6 +29,7 @@ export default defineEventHandler<{
           libraryId: insertedLibrary[0].id as string,
         })
         .returning()
+        .$dynamic()
     );
 
     if (userError) return userError;
