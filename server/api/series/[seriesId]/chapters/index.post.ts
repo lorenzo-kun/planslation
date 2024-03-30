@@ -4,10 +4,10 @@ import { type NewChapter, chapters } from '~/db/schema';
 export default defineEventHandler<{ body: { chapter: NewChapter } }>(
   async (req) => {
     const { seriesId } = getRouterParams(req);
-    if (!seriesId) return argumentMissingError('Series ID');
+    if (!seriesId) throw argumentMissingError('Series ID');
 
     const { chapter: newChapter } = await readBody(req);
-    if (!newChapter) return argumentMissingError('Chapter data');
+    if (!newChapter) throw argumentMissingError('Chapter data');
 
     const db = useDb();
 
@@ -23,6 +23,8 @@ export default defineEventHandler<{ body: { chapter: NewChapter } }>(
         .$dynamic()
     );
 
-    return error || result;
+    if (error) throw error;
+
+    return result;
   }
 );

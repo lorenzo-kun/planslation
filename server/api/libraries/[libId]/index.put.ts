@@ -4,21 +4,28 @@ import { type Library, libraries } from '~/db/schema';
 export default defineEventHandler<{ body: { library: Library } }>(
   async (req) => {
     const { libId } = getRouterParams(req);
-    if (!libId) return argumentMissingError('Library ID');
+    if (!libId) throw argumentMissingError('Library ID');
 
     const { library } = await readBody(req);
     if (!library || !Object.entries(library).length)
-      return argumentMissingError('Library data');
+      throw argumentMissingError('Library data');
 
     const db = useDb();
 
     // TODO: SESSION MANAGEMENT - check current user has permission on this library
-    const result = await db
-      .update(libraries)
-      .set(sanitiseAlias(library))
-      .where(matchesIdOrAlias(libraries, libId))
-      .returning();
+    const { result, error } = await tryUpdate(
+      db
+        .update(libraries)
+        .set(sanitiseAlias(library))
+        .where(matchesIdOrAlias(libraries, libId))
+        .returning()
+        .$dynamic()
+    );
 
-    return result.length ? result[0] : entityNotFoundError('Library', libId);
+    if (error) throw error;
+
+    if (!result?.length) throw entityNotFoundError('Library', libId);
+
+    return result[0];
   }
 );

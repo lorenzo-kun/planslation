@@ -4,10 +4,10 @@ import { type NewSeries, series } from '~/db/schema';
 export default defineEventHandler<{ body: { series: NewSeries } }>(
   async (req) => {
     const { libId } = getRouterParams(req);
-    if (!libId) return argumentMissingError('Library ID');
+    if (!libId) throw argumentMissingError('Library ID');
 
     const { series: newSeries } = await readBody(req);
-    if (!newSeries) return argumentMissingError('Series data');
+    if (!newSeries) throw argumentMissingError('Series data');
 
     const db = useDb();
 
@@ -23,6 +23,8 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
         .$dynamic()
     );
 
-    return error || result;
+    if (error) throw error;
+
+    return result;
   }
 );

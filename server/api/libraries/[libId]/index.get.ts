@@ -3,7 +3,7 @@ import { libraries } from '~/db/schema';
 // returns the details of the given library, including default lanes
 export default defineEventHandler(async (req) => {
   const { libId } = getRouterParams(req);
-  if (!libId) return argumentMissingError('Library ID');
+  if (!libId) throw argumentMissingError('Library ID');
 
   const db = useDb();
 
@@ -17,5 +17,7 @@ export default defineEventHandler(async (req) => {
     },
   });
 
-  return result || entityNotFoundError('Library', libId);
+  if (!result) throw entityNotFoundError('Library', libId);
+
+  return result;
 });

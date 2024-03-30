@@ -3,11 +3,11 @@ import { type Series, series as seriesTable } from '~/db/schema';
 // updates the details of the given series
 export default defineEventHandler<{ body: { series: Series } }>(async (req) => {
   const { seriesId } = getRouterParams(req);
-  if (!seriesId) return argumentMissingError('Series ID');
+  if (!seriesId) throw argumentMissingError('Series ID');
 
   const { series } = await readBody(req);
   if (!series || !Object.entries(series).length)
-    return argumentMissingError('Series data');
+    throw argumentMissingError('Series data');
 
   const db = useDb();
 
@@ -21,7 +21,9 @@ export default defineEventHandler<{ body: { series: Series } }>(async (req) => {
       .$dynamic()
   );
 
-  if (error) return error;
+  if (error) throw error;
 
-  return result.length ? result[0] : entityNotFoundError('Series', seriesId);
+  if (!result?.length) throw entityNotFoundError('Series', seriesId);
+
+  return result[0];
 });

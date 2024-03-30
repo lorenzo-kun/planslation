@@ -5,7 +5,7 @@ export default defineEventHandler<{
   body: { library: NewLibrary; admin?: NewUser };
 }>(async (req) => {
   const { library: newLibrary, admin } = await readBody(req);
-  if (!newLibrary) return argumentMissingError('Library data');
+  if (!newLibrary) throw argumentMissingError('Library data');
 
   const db = useDb();
 
@@ -17,7 +17,7 @@ export default defineEventHandler<{
       .$dynamic()
   );
 
-  if (libraryError) return libraryError;
+  if (libraryError) throw libraryError;
 
   if (admin) {
     const { result: insertedUser, error: userError } = await tryInsert(
@@ -32,7 +32,7 @@ export default defineEventHandler<{
         .$dynamic()
     );
 
-    if (userError) return userError;
+    if (userError) throw userError;
 
     return { ...insertedLibrary, user: insertedUser };
   }

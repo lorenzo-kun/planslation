@@ -3,7 +3,7 @@ import { series } from '~/db/schema';
 // returns the details of the given series, including series lanes
 export default defineEventHandler(async (req) => {
   const { seriesId } = getRouterParams(req);
-  if (!seriesId) return argumentMissingError('Series ID');
+  if (!seriesId) throw argumentMissingError('Series ID');
 
   const db = useDb();
 
@@ -18,5 +18,7 @@ export default defineEventHandler(async (req) => {
     },
   });
 
-  return result || entityNotFoundError('Series', seriesId);
+  if (!result) throw entityNotFoundError('Series', seriesId);
+
+  return result;
 });
