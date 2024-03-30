@@ -17,7 +17,7 @@ export const defaultLanes = sqliteTable(
         onDelete: 'cascade',
       }),
     title: text('title').notNull(),
-    descriptions: text('description'),
+    description: text('description'),
     sortOrder: integer('sortOrder', { mode: 'number' }).notNull(),
     autoAssignUserId: text('autoAssignUserId').references(() => users.id, {
       onUpdate: 'cascade',

@@ -52,7 +52,7 @@ CREATE TABLE `series` (
 ) WITHOUT ROWID;
 
 CREATE TABLE `seriesLanes` (
-	`id` integer PRIMARY KEY NOT NULL,
+	`id` text PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))) NOT NULL,
 	`seriesId` text NOT NULL,
 	`title` text NOT NULL,
 	`description` text,

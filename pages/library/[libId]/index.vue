@@ -18,7 +18,9 @@ const { data } = await useFetch<Series[]>(`/api/libraries/${libId}/series`);
       <tbody>
         <tr v-for="series in data" :key="series.id">
           <td>
-            <NuxtLink :to="`/library/${libId}/series/${series.alias || series.id}`">{{ series.name }}</NuxtLink>
+            <NuxtLink :to="`/library/${libId}/series/${series.alias || series.id}`">
+              {{ series.name }}
+            </NuxtLink>
           </td>
           <td>{{ series.alias }}</td>
           <td>{{ series.description }}</td>

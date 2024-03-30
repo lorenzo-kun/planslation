@@ -1,4 +1,11 @@
-import { libraries, users, type NewLibrary, type NewUser } from '~/db/schema';
+import {
+  libraries,
+  users,
+  type NewLibrary,
+  type NewUser,
+  defaultLanes,
+} from '~/db/schema';
+import { DefaultLanes } from '~/utils';
 
 // creates a new library, as well as admin user if provided
 export default defineEventHandler<{
@@ -18,6 +25,21 @@ export default defineEventHandler<{
   );
 
   if (libraryError) throw libraryError;
+
+  const { error: defaultLanesError } = await tryInsert(
+    db
+      .insert(defaultLanes)
+      .values(
+        DefaultLanes.map(dl => ({
+          ...dl,
+          libraryId: insertedLibrary[0].id as string,
+        }))
+      )
+      .returning({})
+      .$dynamic()
+  );
+
+  if (defaultLanesError) throw defaultLanesError;
 
   if (admin) {
     const { result: insertedUser, error: userError } = await tryInsert(
