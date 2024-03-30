@@ -1,4 +1,9 @@
-import { type NewSeries, defaultLanes, series, seriesLanes } from '~/db/schema';
+import {
+  type NewSeries,
+  libraries,
+  series,
+  seriesLanes,
+} from '~/db/schema';
 
 // creates a new series in the given library
 export default defineEventHandler<{ body: { series: NewSeries } }>(
@@ -12,12 +17,32 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
     const db = useDb();
 
     // TODO: SESSION MANAGEMENT - check current user has permission on this library
+    const library = await db.query.libraries.findFirst({
+      where: matchesIdOrAlias(libraries, libId),
+      columns: {
+        id: true,
+      },
+      with: {
+        defaultLanes: {
+          columns: {
+            title: true,
+            description: true,
+            sortOrder: true,
+            autoAssignUserId: true,
+            notifyUserIds: true,
+          },
+        },
+      },
+    });
+
+    if (!library) throw entityNotFoundError('Library', libId);
+
     const { result, error } = await tryInsert(
       db
         .insert(series)
         .values({
           ...sanitiseAlias(newSeries),
-          libraryId: libId,
+          libraryId: library.id,
         })
         .returning()
         .$dynamic()
@@ -27,22 +52,11 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
 
     const insertedSeries = result[0];
 
-    const libraryDefaultLanes = await db.query.defaultLanes.findMany({
-      where: inLibrary(defaultLanes, libId),
-      columns: {
-        title: true,
-        description: true,
-        sortOrder: true,
-        autoAssignUserId: true,
-        notifyUserIds: true,
-      },
-    });
-
     const { error: defaultLanesError } = await tryInsert(
       db
         .insert(seriesLanes)
         .values(
-          libraryDefaultLanes.map(dl => ({
+          library.defaultLanes.map(dl => ({
             ...dl,
             seriesId: insertedSeries.id,
           }))

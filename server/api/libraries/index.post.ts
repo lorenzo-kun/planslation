@@ -1,9 +1,9 @@
 import {
+  type NewLibrary,
+  type NewUser,
   defaultLanes,
   libraries,
   users,
-  type NewLibrary,
-  type NewUser,
 } from '~/db/schema';
 import { DefaultLanes } from '~/utils';
 
