@@ -1,9 +1,9 @@
 import {
+  defaultLanes,
   libraries,
   users,
   type NewLibrary,
   type NewUser,
-  defaultLanes,
 } from '~/db/schema';
 import { DefaultLanes } from '~/utils';
 
@@ -16,7 +16,7 @@ export default defineEventHandler<{
 
   const db = useDb();
 
-  const { result: insertedLibrary, error: libraryError } = await tryInsert(
+  const { result, error: libraryError } = await tryInsert(
     db
       .insert(libraries)
       .values(sanitiseAlias(newLibrary))
@@ -26,16 +26,17 @@ export default defineEventHandler<{
 
   if (libraryError) throw libraryError;
 
+  const insertedLibrary = result[0];
+
   const { error: defaultLanesError } = await tryInsert(
     db
       .insert(defaultLanes)
       .values(
         DefaultLanes.map(dl => ({
           ...dl,
-          libraryId: insertedLibrary[0].id as string,
+          libraryId: insertedLibrary.id,
         }))
       )
-      .returning({})
       .$dynamic()
   );
 
@@ -48,7 +49,7 @@ export default defineEventHandler<{
         .values({
           ...admin,
           isAdmin: true,
-          libraryId: insertedLibrary[0].id as string,
+          libraryId: insertedLibrary.id,
         })
         .returning()
         .$dynamic()

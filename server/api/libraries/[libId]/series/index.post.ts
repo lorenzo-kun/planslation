@@ -1,5 +1,4 @@
-import { eq } from 'drizzle-orm';
-import { type NewSeries, series, defaultLanes, seriesLanes } from '~/db/schema';
+import { type NewSeries, defaultLanes, series, seriesLanes } from '~/db/schema';
 
 // creates a new series in the given library
 export default defineEventHandler<{ body: { series: NewSeries } }>(
@@ -26,8 +25,10 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
 
     if (error) throw error;
 
+    const insertedSeries = result[0];
+
     const libraryDefaultLanes = await db.query.defaultLanes.findMany({
-      where: eq(defaultLanes.libraryId, libId),
+      where: inLibrary(defaultLanes, libId),
       columns: {
         title: true,
         description: true,
@@ -43,15 +44,14 @@ export default defineEventHandler<{ body: { series: NewSeries } }>(
         .values(
           libraryDefaultLanes.map(dl => ({
             ...dl,
-            seriesId: result[0].id as string,
+            seriesId: insertedSeries.id,
           }))
         )
-        .returning({})
         .$dynamic()
     );
 
     if (defaultLanesError) throw defaultLanesError;
 
-    return result;
+    return insertedSeries;
   }
 );

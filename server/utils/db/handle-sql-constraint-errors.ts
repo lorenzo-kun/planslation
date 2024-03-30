@@ -2,7 +2,6 @@ import type {
   SQLiteInsert,
   SQLiteTable,
   SQLiteUpdate,
-  SelectedFieldsFlat,
 } from 'drizzle-orm/sqlite-core';
 
 const errorTypes = {
@@ -36,13 +35,13 @@ const handleException = (ex: any) => {
   throw ex;
 };
 
-export const tryInsert = async <
-  TTable extends SQLiteTable,
-  TColumns extends SelectedFieldsFlat
->(
-  insertFn:
-    | SQLiteInsert<TTable, 'async', any, TTable['$inferInsert']>
-    | SQLiteInsert<TTable, 'async', any, TColumns>
+export const tryInsert = async <TTable extends SQLiteTable>(
+  insertFn: SQLiteInsert<
+    TTable,
+    'async',
+    any,
+    Partial<TTable['$inferSelect']> | undefined
+  >
 ) => {
   try {
     const result = await insertFn;
@@ -53,13 +52,13 @@ export const tryInsert = async <
   }
 };
 
-export const tryUpdate = async <
-  TTable extends SQLiteTable,
-  TColumns extends SelectedFieldsFlat
->(
-  updateFn:
-    | SQLiteUpdate<TTable, 'async', any, TTable['$inferSelect']>
-    | SQLiteUpdate<TTable, 'async', any, TColumns>
+export const tryUpdate = async <TTable extends SQLiteTable>(
+  updateFn: SQLiteUpdate<
+    TTable,
+    'async',
+    any,
+    Partial<TTable['$inferSelect']> | undefined
+  >
 ) => {
   try {
     const result = await updateFn.execute();
