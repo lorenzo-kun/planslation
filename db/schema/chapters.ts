@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 import type { InsertType, SelectType, links } from '../interfaces';
 import { series, seriesLanes, users } from '.';
 
@@ -16,7 +16,7 @@ export const chapters = sqliteTable(
         onUpdate: 'cascade',
         onDelete: 'cascade',
       }),
-    currentLaneId: integer('currentLaneId').references(() => seriesLanes.id, {
+    currentLaneId: text('currentLaneId').references(() => seriesLanes.id, {
       onUpdate: 'cascade',
       onDelete: 'set null',
     }),

@@ -1,4 +1,4 @@
-import { type NewChapter, chapters } from '~/db/schema';
+import { type NewChapter, chapters, series as seriesTable } from '~/db/schema';
 
 // creates a new chapter in the given series
 export default defineEventHandler<{ body: { chapter: NewChapter } }>(
@@ -12,12 +12,21 @@ export default defineEventHandler<{ body: { chapter: NewChapter } }>(
     const db = useDb();
 
     // TODO: SESSION MANAGEMENT - check current user has permission on this series
+    const series = await db.query.series.findFirst({
+      where: matchesIdOrAlias(seriesTable, seriesId),
+      columns: {
+        id: true,
+      },
+    });
+
+    if (!series) throw entityNotFoundError('Series', seriesId);
+
     const { result, error } = await tryInsert(
       db
         .insert(chapters)
         .values({
           ...newChapter,
-          seriesId,
+          seriesId: series.id,
         })
         .returning()
         .$dynamic()

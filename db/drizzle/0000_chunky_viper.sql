@@ -3,7 +3,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE `chapters` (
 	`id` text PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))) NOT NULL,
 	`seriesId` text NOT NULL,
-	`currentLaneId` integer,
+	`currentLaneId` text,
 	`assignedUserId` text,
 	`shortName` text NOT NULL,
 	`targetLanguage` text NOT NULL,

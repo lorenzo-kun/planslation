@@ -1,7 +1,14 @@
 import { relations, sql } from 'drizzle-orm';
 import { sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 import type { InsertType, SelectType, links } from '../interfaces';
-import { chapters, libraries, seriesLanes } from '.';
+import {
+  chapters,
+  libraries,
+  seriesLanes,
+  type Library,
+  type SeriesLane,
+  type Chapter,
+} from '.';
 
 export const series = sqliteTable(
   'series',
@@ -37,3 +44,9 @@ export const seriesRelations = relations(series, ({ one, many }) => ({
   lanes: many(seriesLanes),
   chapters: many(chapters),
 }));
+
+export type FullSeries = Series & {
+  library: Library;
+  lanes: SeriesLane[];
+  chapters: Chapter[];
+};
