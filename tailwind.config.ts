@@ -24,4 +24,9 @@ export default <Partial<Config>>{
       collections: getIconCollections(['ooui']),
     }),
   ],
+  safelist: [
+    {
+      pattern: /grid-(cols|rows)-\d{1,2}/,
+    },
+  ],
 };
